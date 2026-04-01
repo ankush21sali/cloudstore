@@ -1,0 +1,130 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Dashboard | CloudStore{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static "css/settings.css" %}">
+{% endblock %}
+
+{% block content %}
+
+{% include "navbar.html" %}
+
+     <!-- MAIN CONTENT – SETTINGS PAGE -->
+    <div class="main-content">
+
+        <!-- page header -->
+        <div class="page-header">
+            <h1>
+                <i class="bi bi-gear-fill"></i> SETTINGS
+            </h1>
+            <p>Configure your account preferences, security, and application settings</p>
+        </div>
+
+        <!-- settings layout with sidebar navigation -->
+        <div class="settings-layout">
+
+            <!-- Danger Zone Panel -->
+            <div class="settings-panel" id="danger">
+                <div class="panel-title">
+                    <i class="bi bi-exclamation-triangle"></i> Danger Zone
+                </div>
+
+                <div class="danger-zone">
+                    <div class="danger-zone-title">⚠️ Delete Account</div>
+                    <p class="small">Once you delete your account, there is no going back. Please be certain.</p>
+                    <button class="btn-danger-outline" data-bs-toggle="modal" data-bs-target="#deleteAccountModal">
+                        <i class="bi bi-trash3"></i> Delete Account
+                    </button>
+                </div>
+
+                <div class="danger-zone mt-3">
+                    <div class="danger-zone-title">📁 Clear All Data</div>
+                    <p class="small">Permanently remove all files, folders, and activity data.</p>
+                    <button class="btn-danger-outline" data-bs-toggle="modal" data-bs-target="#clearAllDataModal">
+                        <i class="bi bi-eraser"></i> Clear All Data
+                    </button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+<div class="modal fade" id="deleteAccountModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content rounded-4">
+
+            <form method="POST">
+                {% csrf_token %}
+
+                <div class="modal-header">
+                    <h5 class="modal-title text-danger">
+                        <i class="bi bi-exclamation-triangle"></i> Delete Account
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+
+                <div class="modal-body text-center">
+                    <p class="mb-2 fw-bold">Are you sure you want to delete your account?</p>
+                    <p class="text-muted small">
+                        This action is irreversible. All your files, data, and activity will be permanently removed.
+                    </p>
+                </div>
+
+                <div class="modal-footer justify-content-center">
+                    <button type="submit" name="delete_account" class="btn btn-danger px-4">
+                        Yes, Delete
+                    </button>
+
+                    <button type="button" class="btn btn-outline-secondary px-4" data-bs-dismiss="modal">
+                        Cancel
+                    </button>
+                </div>
+
+            </form>
+
+        </div>
+    </div>
+</div>
+
+
+<div class="modal fade" id="clearAllDataModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content rounded-4">
+
+            <form method="POST">
+                {% csrf_token %}
+
+                <div class="modal-header">
+                    <h5 class="modal-title text-danger">
+                        <i class="bi bi-trash"></i> Clear All Data
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+
+                <div class="modal-body text-center">
+                    <p class="fw-bold mb-2">Are you sure you want to clear all your data?</p>
+                    <p class="text-muted small">
+                        This will permanently delete all your uploaded files (images, videos, audio, documents).
+                        This action cannot be undone.
+                    </p>
+                </div>
+
+                <div class="modal-footer justify-content-center">
+                    <button type="submit" name="clear_data" class="btn btn-danger px-4">
+                        Yes, Clear All
+                    </button>
+
+                    <button type="button" class="btn btn-outline-secondary px-4" data-bs-dismiss="modal">
+                        Cancel
+                    </button>
+                </div>
+
+            </form>
+
+        </div>
+    </div>
+</div>
+
+{% endblock %}

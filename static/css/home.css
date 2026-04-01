@@ -1,0 +1,79 @@
+ @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;500;700&display=swap');
+
+        body {
+            background-color: #ffffff;
+            color: #000000;
+            font-family: 'Space Grotesk', sans-serif;
+        }
+
+        /* Navbar Customization */
+        .navbar {
+            border-bottom: 1px solid #e0e0e0;
+            padding: 1.2rem 0;
+        }
+
+        .navbar-brand {
+            font-weight: 700;
+            letter-spacing: -1px;
+        }
+
+        .nav-link-signin {
+            color: #000000;
+            font-weight: 600;
+            text-decoration: none;
+            margin-right: 25px;
+            transition: 0.3s;
+        }
+
+        .nav-link-signin:hover {
+            opacity: 0.6;
+        }
+
+        /* Buttons */
+        .btn-get-started {
+            background-color: #000000;
+            color: #ffffff;
+            border-radius: 0;
+            font-weight: 600;
+            padding: 10px 25px;
+            border: 2px solid #000000;
+            transition: 0.3s;
+        }
+
+        .btn-get-started:hover {
+            background-color: #ffffff;
+            color: #000000;
+        }
+
+        /* Hero Styling */
+        .hero-section {
+            background-color: #000000;
+            color: #ffffff;
+            padding: 120px 0;
+            text-align: center;
+        }
+
+        .hero-title {
+            font-size: 5rem;
+            font-weight: 700;
+            line-height: 1;
+        }
+
+        /* Media Card */
+        .media-card {
+            border: 1px solid #e0e0e0;
+            padding: 40px 20px;
+            text-align: center;
+            transition: 0.3s ease;
+        }
+
+        .media-card:hover {
+            border-color: #000000;
+            background-color: #f8f9fa;
+        }
+
+        .media-icon {
+            font-size: 2.5rem;
+            margin-bottom: 15px;
+            display: block;
+        }

@@ -1,0 +1,151 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Audio | CloudStore{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static "css/audios.css" %}">
+{% endblock %}
+
+{% block content %}
+
+    {% include "navbar.html" %}
+
+    <div class="main-content">
+        <header class="d-flex justify-content-between align-items-center mb-5">
+            <div>
+                <h1 class="fw-bold mb-0">AUDIO VAULT</h1>
+                <p class="text-muted">MP3, WAV, FLAC, M4A — {{audios|length}} tracks · {{total_size}}</p>
+            </div>
+
+            <button class="btn btn-upload mt-2 mt-sm-0 " data-bs-toggle="modal" data-bs-target="#uploadModal">
+                   <i class="bi bi-cloud-arrow-up me-2"></i>UPLOAD AUDIO
+            </button>
+        </header>
+
+        <!-- Audio grid -->
+        <h5 class="fw-bold mb-3 text-uppercase"><i class="bi bi-music-note-list me-2"></i>Recent tracks</h5> <hr>
+        {% if audios %}
+<div class="row px-2 mb-2 text-muted small fw-bold text-uppercase">
+    <div class="col-6">File Name</div>
+    <div class="col-2 text-center">Duration</div>
+    <div class="col-2 text-center">Size</div>
+    <div class="col-2 text-end">Action</div>
+</div>
+
+<div class="audio-list">
+    {% for audio in audios %}
+    <div class="audio-row position-relative">
+
+        <div class="col-6 d-flex align-items-center">
+            <div class="play-icon-box"
+                onclick="toggleAudio('{{ audio.id }}', this)">
+                <i id="icon-{{ audio.id }}" class="bi bi-play-fill"></i>
+            </div>
+
+            <div>
+                <p class="fw-bold mb-0">{{ audio.file.name|cut:"uploads/" }}</p>
+                <span class="small text-muted">
+                    Uploaded {{ audio.uploaded_at|date:"M d, Y" }}
+                </span>
+            </div>
+        </div>
+
+        <div class="col-2 text-center text-muted">
+            {{ audio.duration_display }}
+        </div>
+
+        <div class="col-2 text-center text-muted">
+            {{ audio.file_size|filesizeformat }}
+        </div>
+
+        <div class="col-2 text-end">
+            <a href="{{ audio.file.url }}" download class="btn btn-link text-dark">
+                <i class="bi bi-download"></i>
+            </a>
+        </div>
+
+        <!-- hidden audio -->
+        <audio id="audio-{{ audio.id }}">
+            <source src="{{ audio.file.url }}" type="audio/mpeg">
+        </audio>
+
+        <!-- progress -->
+        <div class="progress mt-2" style="height:4px;">
+            <div id="progress-{{ audio.id }}" class="progress-bar"></div>
+        </div>
+
+        <!-- Action menu -->
+        <div class="action-menu" tabindex="0">
+            <span class="menu-dots">
+                <i class="bi bi-three-dots-vertical"></i>
+            </span>
+            <div class="action-dropdown">
+                <a class="action-item fav-btn" data-id="{{ audio.id }}" style="background:none; border:none;">
+                    <i class="bi {% if audio.is_favourite %}bi-star-fill text-warning{% else %}bi-star{% endif %} me-2"></i> Favourite
+                </a>
+
+                <a href="{% url "files:delete_file" audio.id %}"
+                   class="action-item text-danger">
+                   <i class="bi bi-trash3 me-2"></i>Delete
+                </a>
+            </div>
+        </div>
+
+    </div>
+    {% endfor %}
+</div>
+{% endif %}
+
+        <hr>
+
+        <!-- Info note -->
+        <div class="border-2 border-dark p-3 bg-light small">
+            <i class="bi bi-info-circle-fill me-2"></i> Audio files support streaming. Use <strong>filters</strong> to
+            find by artist or duration.
+        </div>
+    </div>
+
+<!-- Upload audio Modal -->
+<div class="modal fade" id="uploadModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content rounded-4">
+
+            <form method="POST" enctype="multipart/form-data">
+                {% csrf_token %}
+
+                <div class="modal-header">
+                    <h5 class="modal-title">Upload Audio</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+
+                <div class="modal-body">
+
+                    <label class="form-label">Select Audio</label>
+                    {{ form.file }}
+
+                    <label class="form-label mt-3">Choose Folder</label>
+                    {{ form.folder }}
+
+                </div>
+
+                <div class="modal-footer">
+                    <button type="submit" name="upload_audio" class="btn btn-dark">
+                        UPLOAD NOW
+                    </button>
+                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
+                        Cancel
+                    </button>
+                </div>
+
+            </form>
+
+        </div>
+    </div>
+</div>
+    
+{% endblock %}
+
+{% block scripts %}
+<script src="{% static 'js/is_favourite.js' %}"></script>
+{% endblock %}

@@ -1,0 +1,128 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Dashboard | CloudStore{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static "css/dashboard.css" %}">
+{% endblock %}
+
+{% block content %}
+
+    <div class="sidebar">
+        <h4 class="fw-bold mb-5 text-white">CLOUDSTORE.</h4>
+        
+        {% include "navbar.html" %}
+
+        <div class="mt-auto p-3 border border-secondary">
+            <p class="small mb-1 fw-bold text-white text-uppercase">Vault Space</p>
+            <div class="progress mb-2" style="height: 4px; border-radius: 0; background: #333;">
+                <div class="progress-bar bg-white" style="width: 10%"></div>
+            </div>
+            <p class="mb-0 text-secondary" style="font-size: 0.7rem;">512 MB of 5 GB used</p>
+        </div>
+    </div>
+
+    <div class="top-nav">
+        <div class="dropdown profile-dropdown">
+            <a href="#" class="dropdown-toggle" id="profileMenu" data-bs-toggle="dropdown">
+                <span class="d-none d-md-inline">{{user.first_name}} {{user.last_name}}</span>
+                <div class="user-avatar">{{user.first_name|slice:":1"}}{{user.last_name|slice:":1"}}</div>
+            </a>
+            <ul class="dropdown-menu dropdown-menu-end border-2 border-dark rounded-0 shadow-sm">
+                <li><a class="dropdown-item py-2" href="profile.html"><i class="bi bi-person me-2"></i> My Profile</a>
+                </li>
+                <li><a class="dropdown-item py-2" href="settings.html"><i class="bi bi-gear me-2"></i> Settings</a></li>
+                <li>
+                    <hr class="dropdown-divider">
+                </li>
+                <li><a class="dropdown-item py-2 text-danger" href="{% url "signout" %}"><i class="bi bi-box-arrow-right me-2"></i> Sign
+                        Out</a></li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="main-content">
+        <div class="d-flex justify-content-between align-items-end mb-5">
+            <div>
+                <h1 class="fw-bold mb-0 text-uppercase">My Vault</h1>
+                <p class="text-muted">Welcome back. Your data is encrypted and ready.</p>
+            </div>
+            <button class="btn btn-upload">UPLOAD NEW FILE</button>
+        </div>
+
+        <div class="row g-4 mb-5">
+            <div class="col-12">
+                <div class="p-5 border-2 border-dashed border-dark text-center opacity-75"
+                    style="border-style: dashed !important; background: #fbfbfb;">
+                    <i class="bi bi-cloud-arrow-up fs-1 d-block mb-2"></i>
+                    <p class="fw-bold mb-0 text-uppercase tracking-wider">Drop files anywhere to upload</p>
+                </div>
+            </div>
+        </div>
+
+        <h5 class="fw-bold mb-4 text-uppercase">Quick Access</h5>
+        <div class="row g-4 mb-5">
+            <div class="col-md-3">
+                <div class="file-card">
+                    <i class="bi bi-star-fill mb-3 d-block fs-4"></i>
+                    <p class="fw-bold mb-1">Starred Files</p>
+                    <span class="small text-muted">12 items</span>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="file-card">
+                    <i class="bi bi-clock-history mb-3 d-block fs-4"></i>
+                    <p class="fw-bold mb-1">Recent Assets</p>
+                    <span class="small text-muted">48 items</span>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="file-card">
+                    <i class="bi bi-shield-lock-fill mb-3 d-block fs-4"></i>
+                    <p class="fw-bold mb-1">Secure Docs</p>
+                    <span class="small text-muted">5 items</span>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="file-card">
+                    <i class="bi bi-trash3 mb-3 d-block fs-4"></i>
+                    <p class="fw-bold mb-1">Recycle Bin</p>
+                    <span class="small text-muted">2 items</span>
+                </div>
+            </div>
+        </div>
+
+        <h5 class="fw-bold mb-4 text-uppercase">Recent Uploads</h5>
+        <div class="table-responsive">
+            <table class="table align-middle border-top border-dark">
+                <thead>
+                    <tr class="small text-muted text-uppercase">
+                        <th class="py-3">Name</th>
+                        <th class="py-3">Category</th>
+                        <th class="py-3">Size</th>
+                        <th class="py-3 text-end">Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="py-3 fw-bold"><i class="bi bi-file-pdf me-2"></i> project_brief.pdf</td>
+                        <td>Documents</td>
+                        <td>2.4 MB</td>
+                        <td class="text-end"><button class="btn btn-sm btn-outline-dark rounded-0"><i
+                                    class="bi bi-download"></i></button></td>
+                    </tr>
+                    <tr>
+                        <td class="py-3 fw-bold"><i class="bi bi-image me-2"></i> vacation_shot.jpg</td>
+                        <td>Images</td>
+                        <td>4.1 MB</td>
+                        <td class="text-end"><button class="btn btn-sm btn-outline-dark rounded-0"><i
+                                    class="bi bi-download"></i></button></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+
+{% endblock %}

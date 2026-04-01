@@ -1,0 +1,308 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Dashboard | CloudStore{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static "css/dashboard.css" %}">
+{% endblock %}
+
+{% block content %}
+
+    {% include "navbar.html" %}
+    
+     <!-- MAIN CONTENT  -->
+    <div class="main-content">
+        <div class="d-flex flex-wrap justify-content-between align-items-center gap-3 mb-4">
+            <div>
+                <h1 class="fw-bold mb-0 text-uppercase" style="font-size: clamp(1.5rem, 5vw, 2.2rem);">DASHBOARD</h1>
+                <p class="text-muted mb-0">Welcome back, {{user.first_name}}. Here's your vault overview.</p>
+            </div>
+            <button class="btn btn-upload mt-2 mt-sm-0 " data-bs-toggle="modal" data-bs-target="#uploadModal">
+                   <i class="bi bi-cloud-arrow-up me-2"></i>QUICK UPLOAD
+            </button>
+        </div>
+
+        <!-- Stats Row: Total Files, Images, Videos, Audio, Documents, Folders -->
+        <div class="row g-3 mb-5">
+            
+            <div class="col-6 col-md-4 col-xl-2">
+                <a href="{% url "files:dashboard" %}" class="text-dark text-decoration-none">
+                    <div class="stat-card">
+                        <div class="stat-icon"><i class="bi bi-files"></i></div>
+                        <div class="stat-content">
+                            <div class="stat-number">{{user_files.count}}</div>
+                            <div class="stat-label">Total Files</div>
+                        </div>
+                    </div>
+                </a>
+            </div>
+
+            <div class="col-6 col-md-4 col-xl-2">
+                <a href="{% url "files:images" %}" class="text-dark text-decoration-none">
+                    <div class="stat-card">
+                        <div class="stat-icon"><i class="bi bi-image"></i></div>
+                        <div class="stat-content">
+                            <div class="stat-number">{{images.count}}</div>
+                            <div class="stat-label">Images</div>
+                        </div>
+                    </div>
+                </a>
+            </div>
+            
+            <div class="col-6 col-md-4 col-xl-2">
+                <a href="{% url "files:videos" %}" class="text-dark text-decoration-none">
+                    <div class="stat-card">
+                        <div class="stat-icon"><i class="bi bi-play-circle"></i></div>
+                        <div class="stat-content">
+                            <div class="stat-number">{{videos.count}}</div>
+                            <div class="stat-label">Videos</div>
+                        </div>
+                    </div>
+                </a>
+            </div>
+
+            <div class="col-6 col-md-4 col-xl-2">
+                <a href="{% url "files:audios" %}" class="text-dark text-decoration-none">
+                <div class="stat-card">
+                    <div class="stat-icon"><i class="bi bi-music-note-beamed"></i></div>
+                    <div class="stat-content">
+                        <div class="stat-number">{{audios.count}}</div>
+                        <div class="stat-label">Audio</div>
+                    </div>
+                </div>
+                </a>
+            </div>
+
+            <div class="col-6 col-md-4 col-xl-2">
+                <a href="{% url "files:docs" %}" class="text-dark text-decoration-none">
+                <div class="stat-card">
+                    <div class="stat-icon"><i class="bi bi-file-earmark-text"></i></div>
+                    <div class="stat-content">
+                        <div class="stat-number">{{docs.count}}</div>
+                        <div class="stat-label">Documents</div>
+                    </div>
+                </div>
+                </a>
+            </div>
+
+            <div class="col-6 col-md-4 col-xl-2">
+                <a href="{% url "files:dashboard" %}" class="text-dark text-decoration-none">
+                <div class="stat-card" style="background:#f8f8f8;">
+                    <div class="stat-icon"><i class="bi bi-folder-plus"></i></div>
+                    <div class="stat-content">
+                        <div class="stat-number">{{user_folders.count}}</div>
+                        <div class="stat-label">Folders</div>
+                    </div>
+                </div>
+                </a>
+            </div>
+
+        </div>
+
+        <!-- Created Folders Section-->
+        <h3 class="section-title"><i class="bi bi-folder2-open me-2"></i>Created Folders</h3>
+        <div class="row g-3 mb-5">
+            {% if user_folders %}
+            {% for folder in user_folders %}
+            <div class="col-6 col-md-4 col-lg-3">
+                <div class="folder-card">
+                    <a href="{% url "files:folder_detail" folder.slug %}" class="text-decoration-none text-dark">
+                        <div class="folder-icon"><i class="bi bi-folder-fill"></i></div>
+                        <div class="folder-info">
+                            <div class="folder-name">{{folder.name}}</div>
+                            <div class="folder-meta">{{ folder.uploadedfile_set.count }} items</div>
+                        </div>
+                    </a>
+
+                    <div class="action-delete">
+                        <a href="{% url "files:delete_folder" folder.id %}" class="action-item text-danger" >
+                            <i class="bi bi-trash3 me-2"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+            {% endif %}
+           <!-- Create Folder Section-->
+            <div class="col-6 col-md-4 col-lg-3">
+                <a data-bs-toggle="modal" data-bs-target="#folderModal">
+                    <div class="folder-card">
+                        <div class="folder-icon"><i class="bi bi-folder-plus"></i></div>
+                        <div class="folder-info">
+                            <div class="folder-name">Create New</div>
+                            <div class="folder-meta">+ add folder</div>
+                        </div>
+                    </div>
+                </a>
+            </div>
+        </div>
+
+        <div class="border border-danger p-3 rounded-3 bg-light small d-flex align-items-start gap-2">
+            <i class="bi bi-exclamation-triangle-fill text-danger fs-5"></i>
+            <div>
+                <strong>Delete Folder?</strong>
+                <p class="mb-0"> This will permanently delete the folder and all its files.
+                    <span class="text-danger"> This action cannot be undone. </span>
+                </p>
+            </div>
+        </div>
+        
+        <hr>
+
+        <!-- Recent Uploads Section - with horizontal scroll on mobile -->
+        <h3 class="section-title"><i class="bi bi-clock-history me-2"></i>Recent Uploads</h3>
+        <div class="table-responsive mb-5">
+            <table class="table table-custom align-middle">
+                <thead>
+                    <tr class="small text-muted text-uppercase">
+                        <th class="py-3">Name</th>
+                        <th class="py-3">Type</th>
+                        <th class="py-3">Size</th>
+                        <th class="py-3">Uploaded</th>
+                        <th class="py-3">Folder</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for recent_file in recent_files %}
+                    <tr>
+                        <!-- File Name + Icon -->
+                        <td class="py-3 fw-bold">
+                        {% if "image" in recent_file.file_type %}
+                        <i class="bi bi-image-fill me-2 text-success"></i>
+                        
+                        {% elif "video" in recent_file.file_type %}
+                        <i class="bi bi-camera-video-fill me-2 text-primary"></i>
+                        
+                        {% elif "audio" in recent_file.file_type %}
+                        <i class="bi bi-music-note-beamed me-2 text-warning"></i>
+                        
+                        {% elif "application" in recent_file.file_type %}
+                        <i class="bi bi-file-earmark-text me-2 text-danger"></i>
+                        
+                        {% else %}
+                        <i class="bi bi-file-earmark me-2 text-secondary"></i>
+                        {% endif %}
+                        
+                        {{ recent_file.file.name|cut:"uploads/"|truncatechars:20 }}
+                        </td>
+                        
+                        <td>
+                            <span class="file-badge">
+                                {{ recent_file.file_type|upper|truncatechars:20 }}
+                            </span>
+                        </td>
+                    
+                    <td>{{ recent_file.file.size|filesizeformat }}</td>
+                    
+                    <td>{{ recent_file.uploaded_at|timesince }} ago</td>
+                    
+                    {% if recent_file.folder.name %}
+                    <td>{{ recent_file.folder.name }}</td>
+                    {% else %}
+                    <td> <i>None</i> </td>
+                    {% endif %}
+                   
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+        <hr>
+
+        <!-- Status Note - responsive flex -->
+        <div
+            class="border-2 border-dark p-3 bg-light small d-flex flex-wrap justify-content-between align-items-center gap-2">
+            <span><i class="bi bi-info-circle-fill me-2"></i>
+                Your vault overview shows recent activity, storage usage, and quick access to files and folders.
+            </span>
+        </div>
+    </div>
+
+
+
+
+<!-- Create Folder Modal -->
+<div class="modal fade" id="folderModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content rounded-4">
+
+            <form method="POST">
+                {% csrf_token %}
+
+                <div class="modal-header">
+                    <h5 class="modal-title">Create Folder</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+
+                <div class="modal-body">
+
+                    <label class="form-label">Folder Name</label>
+                    {{ create_form.name }}
+
+                    {% if create_form.name.errors %}
+                        <div class="text-danger small mt-1">
+                            {{ create_form.name.errors }}
+                        </div>
+                    {% endif %}
+
+                </div>
+
+                <div class="modal-footer">
+                    <button type="submit" name="create_folder" class="btn btn-dark">
+                        CREATE FOLDER
+                    </button>
+                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
+                        Cancel
+                    </button>
+                </div>
+
+            </form>
+
+        </div>
+    </div>
+</div>
+
+
+<!-- Upload File Modal -->
+<div class="modal fade" id="uploadModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content rounded-4">
+
+            <form method="POST" enctype="multipart/form-data">
+                {% csrf_token %}
+
+                <div class="modal-header">
+                    <h5 class="modal-title">Upload File</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+
+                <div class="modal-body">
+
+                    <!-- File -->
+                    <label class="form-label">Select File</label>
+                    {{ form.file }}
+
+                    <!-- Existing Folder -->
+                    <label class="form-label mt-3">Choose Folder</label>
+                    {{ form.folder }}
+
+                </div>
+
+                <div class="modal-footer">
+                    <button type="submit" name="upload_file" class="btn btn-dark">
+                        UPLOAD NOW
+                    </button>
+                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
+                        Cancel
+                    </button>
+                </div>
+
+            </form>
+
+        </div>
+    </div>
+</div>
+
+{% endblock %}

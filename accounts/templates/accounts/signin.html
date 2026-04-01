@@ -1,0 +1,64 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Sign In | CloudStore{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static "css/signin.css" %}">
+{% endblock %}
+
+{% block content %}
+
+    <a href="{% url "home" %}" class="back-home"><i class="bi bi-arrow-left me-2"></i> Back to Home</a>
+
+    <div class="signin-container">
+        <div class="signin-visual">
+            <a href="{% url "home" %}" class="text-white text-decoration-none"><h2 class="fw-bold mb-5">CLOUDSTORE.</h2></a>
+            <h1 class="display-3 fw-bold mb-4">Welcome <br> Back.</h1>
+            <p class="lead opacity-50">Access your secure vault of images, documents, and media from any device.</p>
+
+            <div class="mt-5 pt-5 border-top border-secondary" style="--bs-border-opacity: .2;">
+                <p class="small text-uppercase fw-bold opacity-75">New Security Update</p>
+                <p class="small">We have enhanced our encryption protocols for MP4 and MOV streaming. Your media is now
+                    safer than ever.</p>
+            </div>
+        </div>
+
+        <div class="signin-form-section">
+            <div class="mx-auto" style="max-width: 400px; width: 100%;">
+                <h3 class="fw-bold mb-1">Sign In</h3>
+                <p class="text-muted mb-4 small">Enter your credentials to access your files.</p>
+
+                {% if messages %}
+                    {% for message in messages %}
+                        <small class="text-danger">{{ message }}</small>
+                    {% endfor %}
+                {% endif %}
+
+                <form method="post">
+                    {% csrf_token %}
+                    <div class="mb-3">
+                        <label class="form-label">Username or Email</label>
+                        <input type="text" name="user_identity" class="form-control" placeholder="Enter your username" required>
+                    </div>
+
+                    <div class="mb-2">
+                        <label class="form-label">Password</label>
+                        <input type="password" name="password" class="form-control" placeholder="••••••••" required>
+                    </div>
+
+                    <div class="text-end mb-4">
+                        <a href="#" class="text-muted small text-decoration-none">Forgot password?</a>
+                    </div>
+
+                    <button type="submit" class="btn btn-signin mb-4">Access Vault</button>
+
+                    <p class="text-center small">
+                        Don't have an account? <a href="{% url 'accounts:signup' %}" class="signup-link">Create one</a>
+                    </p>
+                </form>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

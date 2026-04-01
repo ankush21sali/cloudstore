@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Profile | CloudStore</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;500;700&display=swap');
+
+        body {
+            background-color: #ffffff;
+            color: #000000;
+            font-family: 'Space Grotesk', sans-serif;
+        }
+
+        /* Profile Header */
+        .profile-header {
+            background-color: #000;
+            color: #fff;
+            padding: 60px 0;
+            border-bottom: 10px solid #333;
+        }
+
+        .profile-avatar {
+            width: 120px;
+            height: 120px;
+            background-color: #fff;
+            color: #000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
+            font-weight: 700;
+            border: 5px solid #fff;
+            overflow: hidden;
+            /* Ensures image stays in circle/square */
+        }
+
+        .profile-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        /* Content Sections */
+        .settings-card {
+            border: 2px solid #000;
+            border-radius: 0;
+            margin-bottom: 30px;
+        }
+
+        .settings-header {
+            background-color: #000;
+            color: #fff;
+            padding: 10px 20px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .form-control {
+            border-radius: 0;
+            border: 2px solid #eee;
+            padding: 12px;
+        }
+
+        .form-control:focus {
+            border-color: #000;
+            box-shadow: none;
+        }
+
+        /* Storage Visualization */
+        .storage-bar-multi {
+            height: 25px;
+            display: flex;
+            background-color: #eee;
+            margin-bottom: 15px;
+        }
+
+        .bar-img {
+            width: 45%;
+            background-color: #000;
+        }
+
+        .bar-vid {
+            width: 20%;
+            background-color: #444;
+        }
+
+        .bar-aud {
+            width: 15%;
+            background-color: #888;
+        }
+
+        .bar-doc {
+            width: 5%;
+            background-color: #ccc;
+        }
+
+        .btn-black {
+            background-color: #000;
+            color: #fff;
+            border-radius: 0;
+            font-weight: 700;
+            padding: 12px 30px;
+            border: 2px solid #000;
+            transition: 0.3s;
+        }
+
+        .btn-black:hover {
+            background-color: #fff;
+            color: #000;
+        }
+
+        .btn-outline-dark {
+            border-radius: 0;
+            font-weight: 600;
+            border: 2px solid #000;
+        }
+
+        .nav-back {
+            color: #fff;
+            text-decoration: none;
+            font-weight: 500;
+            transition: 0.3s;
+        }
+
+        .nav-back:hover {
+            opacity: 0.7;
+            color: #fff;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="profile-header">
+        <div class="container">
+            <a href="dashboard.html" class="nav-back mb-4 d-inline-block">
+                <i class="bi bi-arrow-left me-2"></i> RETURN TO VAULT
+            </a>
+            <div class="d-flex align-items-center gap-4">
+                <div class="profile-avatar">
+                    <span id="avatar-text">JD</span>
+                </div>
+                <div>
+                    <h1 class="fw-bold mb-1">John Doe</h1>
+                    <p class="mb-0 opacity-75">Member since: Feb 2026 | <span class="badge bg-white text-dark">FREE
+                            PLAN</span></p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container py-5">
+        <div class="row">
+            <div class="col-lg-8">
+                <div class="settings-card card">
+                    <div class="settings-header">Personal Information</div>
+                    <div class="card-body p-4">
+                        <form>
+                            <div class="mb-5 pb-4 border-bottom">
+                                <label class="form-label small fw-bold d-block mb-3">PROFILE PHOTO</label>
+                                <div class="d-flex align-items-center gap-3">
+                                    <div class="bg-light border"
+                                        style="width: 80px; height: 80px; display: flex; align-items: center; justify-content: center;">
+                                        <i class="bi bi-person text-muted fs-2"></i>
+                                    </div>
+                                    <div>
+                                        <input type="file" id="profilePhoto" class="d-none" accept="image/*">
+                                        <button type="button" class="btn btn-outline-dark btn-sm mb-2"
+                                            onclick="document.getElementById('profilePhoto').click()">
+                                            UPLOAD NEW PHOTO
+                                        </button>
+                                        <p class="small text-muted mb-0">Recommended: Square JPG or PNG, max 2MB.</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row g-3">
+                                <div class="col-md-6">
+                                    <label class="form-label small fw-bold">FIRST NAME</label>
+                                    <input type="text" class="form-control" value="John">
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label small fw-bold">LAST NAME</label>
+                                    <input type="text" class="form-control" value="Doe">
+                                </div>
+                                <div class="col-md-12">
+                                    <label class="form-label small fw-bold">USERNAME</label>
+                                    <input type="text" class="form-control" value="johndoe_cloud">
+                                </div>
+                                <div class="col-md-12 mb-4">
+                                    <label class="form-label small fw-bold">EMAIL ADDRESS</label>
+                                    <input type="email" class="form-control" value="john@example.com">
+                                </div>
+                            </div>
+                            <button class="btn btn-black">SAVE CHANGES</button>
+                        </form>
+                    </div>
+                </div>
+
+                <div class="settings-card card">
+                    <div class="settings-header">Security & Password</div>
+                    <div class="card-body p-4">
+                        <div class="mb-4">
+                            <label class="form-label small fw-bold">CURRENT PASSWORD</label>
+                            <input type="password" class="form-control" placeholder="••••••••">
+                        </div>
+                        <div class="row g-3 mb-4">
+                            <div class="col-md-6">
+                                <label class="form-label small fw-bold">NEW PASSWORD</label>
+                                <input type="password" class="form-control" placeholder="••••••••">
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label small fw-bold">CONFIRM NEW PASSWORD</label>
+                                <input type="password" class="form-control" placeholder="••••••••">
+                            </div>
+                        </div>
+                        <button class="btn btn-black">UPDATE PASSWORD</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-4">
+                <div class="settings-card card">
+                    <div class="settings-header">Vault Storage</div>
+                    <div class="card-body p-4">
+                        <h3 class="fw-bold mb-1">2.1 GB</h3>
+                        <p class="text-muted small mb-4">Used of your 5 GB limit</p>
+
+                        <div class="storage-bar-multi">
+                            <div class="bar-img" title="Images"></div>
+                            <div class="bar-vid" title="Videos"></div>
+                            <div class="bar-aud" title="Audio"></div>
+                            <div class="bar-doc" title="Docs"></div>
+                        </div>
+
+                        <div class="storage-legend small">
+                            <div class="d-flex justify-content-between mb-2">
+                                <span><i class="bi bi-square-fill me-2"></i> Images</span>
+                                <span class="fw-bold">1.2 GB</span>
+                            </div>
+                            <div class="d-flex justify-content-between mb-2">
+                                <span><i class="bi bi-square-fill me-2 text-secondary"></i> Videos</span>
+                                <span class="fw-bold">0.6 GB</span>
+                            </div>
+                            <div class="d-flex justify-content-between mb-2">
+                                <span><i class="bi bi-square-fill me-2 text-muted"></i> Audio</span>
+                                <span class="fw-bold">0.2 GB</span>
+                            </div>
+                            <div class="d-flex justify-content-between">
+                                <span><i class="bi bi-square-fill me-2 opacity-25"></i> Documents</span>
+                                <span class="fw-bold">0.1 GB</span>
+                            </div>
+                        </div>
+
+                        <hr class="my-4">
+                        <div class="p-3 bg-light text-center">
+                            <p class="small mb-0 text-muted">Need more space?</p>
+                            <a href="#" class="fw-bold text-dark text-decoration-none">Request Storage Increase</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+
+</html>

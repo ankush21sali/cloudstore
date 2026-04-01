@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Settings | CloudStore</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;500;700&display=swap');
+
+        :root {
+            --sidebar-width: 260px;
+        }
+
+        body {
+            background-color: #ffffff;
+            color: #000000;
+            font-family: 'Space Grotesk', sans-serif;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: var(--sidebar-width);
+            height: 100vh;
+            background-color: #000;
+            color: #fff;
+            position: fixed;
+            padding: 30px 20px;
+            display: flex;
+            flex-direction: column;
+            z-index: 1000;
+        }
+
+        .nav-link {
+            border-radius: 0;
+            transition: 0.3s;
+            margin-bottom: 5px;
+        }
+
+        .nav-link.active {
+            background-color: #fff !important;
+            color: #000 !important;
+            font-weight: 700;
+        }
+
+        .nav-link:hover:not(.active) {
+            background-color: #222;
+            color: #fff !important;
+        }
+
+        /* Main Content */
+        .main-content {
+            margin-left: var(--sidebar-width);
+            padding: 40px;
+        }
+
+        /* Setting Sections */
+        .settings-card {
+            border: 2px solid #000;
+            padding: 30px;
+            margin-bottom: 30px;
+            background: #fff;
+        }
+
+        .settings-title {
+            text-transform: uppercase;
+            font-weight: 700;
+            letter-spacing: 1px;
+            border-bottom: 2px solid #000;
+            padding-bottom: 10px;
+            margin-bottom: 25px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        /* Input Styling */
+        .form-control,
+        .form-select {
+            border: 2px solid #000;
+            border-radius: 0;
+            padding: 12px;
+            font-weight: 500;
+        }
+
+        .form-control:focus {
+            box-shadow: 6px 6px 0px #000;
+            border-color: #000;
+        }
+
+        /* Custom Toggle Switch */
+        .form-check-input:checked {
+            background-color: #000;
+            border-color: #000;
+        }
+
+        .btn-save {
+            background: #000;
+            color: #fff;
+            border-radius: 0;
+            font-weight: 700;
+            padding: 12px 40px;
+            border: 2px solid #000;
+            transition: 0.3s;
+        }
+
+        .btn-save:hover {
+            background: #fff;
+            color: #000;
+            box-shadow: 8px 8px 0px #000;
+        }
+
+        .danger-zone {
+            border-color: #dc3545;
+        }
+
+        @media (max-width: 768px) {
+            .sidebar {
+                display: none;
+            }
+
+            .main-content {
+                margin-left: 0;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="sidebar">
+        <h4 class="fw-bold mb-5">CLOUDSTORE.</h4>
+        <nav class="nav flex-column gap-2">
+            <a class="nav-link text-secondary p-3" href="{% url 'files:dashboard' %}"><i class="bi bi-grid-fill me-2"></i> All
+                Files</a>
+            <a class="nav-link text-secondary p-3" href="{% url 'files:images' %}"><i class="bi bi-image me-2"></i> Images</a>
+            <a class="nav-link text-secondary p-3" href="{% url 'files:videos' %}"><i class="bi bi-play-circle me-2"></i> Videos</a>
+            <a class="nav-link text-secondary p-3" href="{% url 'files:audios' %}"><i class="bi bi-music-note-beamed me-2"></i>
+                Audio</a>
+            <a class="nav-link text-secondary p-3" href="{% url 'files:docs' %}"><i class="bi bi-file-earmark-text me-2"></i>
+                Documents</a>
+        </nav>
+
+        <div class="mt-auto p-3 bg-dark">
+            <p class="small mb-1 fw-bold text-white">SYSTEM STATUS</p>
+            <p class="mb-0 text-success small"><i class="bi bi-check-circle-fill me-1"></i> All Systems Nominal</p>
+        </div>
+    </div>
+
+    <div class="main-content">
+        <header class="mb-5">
+            <h1 class="fw-bold mb-0">SETTINGS</h1>
+            <p class="text-muted">Configure your vault and security preferences.</p>
+        </header>
+
+        <div class="row">
+            <div class="col-lg-8">
+
+                <div class="settings-card">
+                    <h5 class="settings-title"><i class="bi bi-person-gear"></i> Profile Information</h5>
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <label class="form-label small fw-bold">Display Name</label>
+                            <input type="text" class="form-control" value="John Doe">
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label small fw-bold">Email Address</label>
+                            <input type="email" class="form-control" value="john@example.com">
+                        </div>
+                        <div class="col-12 mt-4">
+                            <button class="btn btn-save">UPDATE PROFILE</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="settings-card">
+                    <h5 class="settings-title"><i class="bi bi-shield-lock"></i> Security & Access</h5>
+                    <div class="d-flex justify-content-between align-items-center mb-4">
+                        <div>
+                            <p class="fw-bold mb-0">Two-Factor Authentication</p>
+                            <span class="small text-muted">Add an extra layer of security to your account.</span>
+                        </div>
+                        <div class="form-check form-switch">
+                            <input class="form-check-input" type="checkbox" id="2faSwitch" checked>
+                        </div>
+                    </div>
+                    <hr>
+                    <div class="d-flex justify-content-between align-items-center mb-4">
+                        <div>
+                            <p class="fw-bold mb-0">Encryption Keys</p>
+                            <span class="small text-muted">Rotate your private vault keys. (Last rotated: 30 days
+                                ago)</span>
+                        </div>
+                        <button class="btn btn-sm btn-outline-dark rounded-0 fw-bold">ROTATE</button>
+                    </div>
+                </div>
+
+                <div class="settings-card">
+                    <h5 class="settings-title"><i class="bi bi-bell"></i> Notifications</h5>
+                    <div class="form-check mb-3">
+                        <input class="form-check-input" type="checkbox" id="emailNote" checked>
+                        <label class="form-check-label fw-bold" for="emailNote">Email me on large uploads</label>
+                    </div>
+                    <div class="form-check mb-3">
+                        <input class="form-check-input" type="checkbox" id="loginNote" checked>
+                        <label class="form-check-label fw-bold" for="loginNote">Alert me on new logins</label>
+                    </div>
+                </div>
+
+                <div class="settings-card danger-zone">
+                    <h5 class="settings-title text-danger border-danger"><i class="bi bi-exclamation-triangle"></i>
+                        Danger Zone</h5>
+                    <p class="small text-muted mb-4">Once you delete your vault, there is no going back. All 2.0 GB of
+                        data will be permanently wiped.</p>
+                    <button class="btn btn-outline-danger rounded-0 fw-bold">DELETE ENTIRE VAULT</button>
+                </div>
+
+            </div>
+
+            <div class="col-lg-4">
+                <div class="settings-card bg-light border-0">
+                    <h6 class="fw-bold mb-3">PLAN DETAILS</h6>
+                    <div class="d-flex justify-content-between mb-2">
+                        <span>Current Plan:</span>
+                        <span class="fw-bold">Free Tier</span>
+                    </div>
+                    <div class="d-flex justify-content-between mb-4">
+                        <span>Storage:</span>
+                        <span class="fw-bold">5.0 GB Max</span>
+                    </div>
+                    <button class="btn btn-dark w-100 rounded-0 fw-bold">UPGRADE TO PRO</button>
+                </div>
+
+                <div class="p-3 text-center border border-2 border-dark">
+                    <p class="small fw-bold mb-1">NEED HELP?</p>
+                    <p class="small text-muted mb-0">Contact support@cloudstore.io</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+
+</html>

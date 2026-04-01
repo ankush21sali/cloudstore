@@ -1,0 +1,122 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}{{ folder.name }} | CloudStore{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static "css/folder_detail.css" %}">
+{% endblock %}
+
+{% block content %}
+
+{% include "navbar.html" %}
+
+<div class="main-content">
+
+    <!-- Header -->
+    <header class="d-flex justify-content-between align-items-center mb-4">
+        <!-- Header -->
+        <div class="d-flex flex-wrap justify-content-between align-items-center mb-4">
+            <div>
+                <h1 class="fw-bold mb-0 text-uppercase"><i class="bi bi-folder-fill"></i> {{folder.name}} FOLDER</h1>
+                <p class="text-muted">Image, Video, Audio, Document — {{files|length}} items · {{total_size}}</p>
+            </div>
+        </div>
+        <button class="btn btn-upload mt-2 mt-sm-0 text-uppercase" data-bs-toggle="modal"
+            data-bs-target="#uploadInFolderModal">
+            <i class="bi bi-cloud-arrow-up me-2"></i>UPLOAD {{folder.name}}
+        </button>
+    </header>
+
+    <!-- Recent Uploads Section - with horizontal scroll on mobile -->
+    <h3 class="section-title"><i class="bi bi-clock-history me-2"></i>Recent Uploads</h3>
+    <hr>
+    {% if files %}
+    <div class="table-responsive mb-5">
+        <table class="table table-custom align-middle">
+            <thead>
+                <tr class="small text-muted text-uppercase">
+                    <th class="py-3">Name</th>
+                    <th class="py-3">Type</th>
+                    <th class="py-3">Size</th>
+                    <th class="py-3">Uploaded</th>
+                    <th class="py-3 text-end">Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for file in files %}
+                <tr>
+                     <!-- File Name + Icon -->
+                    <td class="py-3 fw-bold">
+                        {% if "image" in file.file_type %}
+                        <i class="bi bi-image-fill me-2 text-success"></i>
+                        
+                        {% elif "video" in file.file_type %}
+                        <i class="bi bi-camera-video-fill me-2 text-primary"></i>
+                        
+                        {% elif "audio" in file.file_type %}
+                        <i class="bi bi-music-note-beamed me-2 text-warning"></i>
+                        
+                        {% elif "application" in file.file_type %}
+                        <i class="bi bi-file-earmark-text me-2 text-danger"></i>
+                        
+                        {% else %}
+                        <i class="bi bi-file-earmark me-2 text-secondary"></i>
+                        {% endif %}
+                        
+                        {{ file.file.name|cut:"uploads/"|truncatechars:20 }}
+                    </td>
+                    <td><span class="file-badge">{{file.file_type|truncatechars:20}}</span></td>
+                    <td>{{ file.file.size|filesizeformat }}</td>
+                    <td>{{file.uploaded_at|date:"M d, Y"}}</td>
+                    <td class="text-end text-nowrap">
+                        <a href="#" download class="btn btn-outline-dark-custom"><i class="bi bi-download"></i></a>
+                    </td>
+                </tr>
+                {% endfor %}
+    
+            </tbody>
+        </table>
+    </div>
+    {% endif %}
+
+</div>
+
+
+
+<!-- Upload video Modal -->
+<div class="modal fade" id="uploadInFolderModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content rounded-4">
+
+            <form method="POST" enctype="multipart/form-data">
+                {% csrf_token %}
+
+                <div class="modal-header">
+                    <h5 class="modal-title">Add In {{folder.name}}</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+
+                <div class="modal-body">
+
+                    <label class="form-label">Select File</label>
+                    <input type="file" name="file" class="form-control">
+
+                </div>
+
+                <div class="modal-footer">
+                    <button type="submit" name="upload_file" class="btn btn-dark">
+                        UPLOAD NOW
+                    </button>
+                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
+                        Cancel
+                    </button>
+                </div>
+
+            </form>
+
+        </div>
+    </div>
+</div>
+
+{% endblock %}

@@ -1,0 +1,270 @@
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;500;700&display=swap');
+
+:root {
+    --sidebar-width: 260px;
+}
+
+/* ===== BASE ===== */
+
+body {
+    background-color: #ffffff;
+    color: #000000;
+    font-family: 'Space Grotesk', sans-serif;
+}
+
+/* ===== SIDEBAR ===== */
+
+.sidebar {
+    width: var(--sidebar-width);
+    height: 100vh;
+    background-color: #000;
+    color: #fff;
+    position: fixed;
+    padding: 30px 20px;
+    display: flex;
+    flex-direction: column;
+    z-index: 1000;
+}
+
+.nav-link {
+    border-radius: 0;
+    transition: 0.25s;
+    margin-bottom: 5px;
+}
+
+.nav-link.active {
+    background-color: #fff !important;
+    color: #000 !important;
+    font-weight: 700;
+}
+
+.nav-link:hover:not(.active) {
+    background-color: #222;
+    color: #fff !important;
+}
+
+
+/* Top Header Navigation */
+        .top-nav {
+            margin-left: var(--sidebar-width);
+            height: 70px;
+            border-bottom: 1px solid #eeeeee;
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            padding: 0 40px;
+            background: #fff;
+            position: sticky;
+            top: 0;
+            z-index: 999;
+        }
+
+        /* Profile Dropdown Styling */
+        .profile-dropdown .dropdown-toggle {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            text-decoration: none;
+            color: #000;
+            font-weight: 700;
+        }
+
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            background-color: #000;
+            color: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.9rem;
+        }
+
+        .dropdown-item:active {
+        background-color: transparent !important;
+        color: #000 !important;
+        }
+
+/* ===============================
+   MAIN CONTENT
+=================================*/
+.main-content {
+    margin-left: var(--sidebar-width);
+    padding: 30px;
+}
+
+/* Upload button */
+.btn-upload {
+    background: #000;
+    color: #fff;
+    padding: 10px 18px;
+    border-radius: 8px;
+    font-weight: 700;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.btn-upload:hover {
+    background: #222;
+    color: #fff;
+}
+
+/* ===============================
+   STAT CARDS
+=================================*/
+.stat-card {
+    border: 2px solid #000;
+    border-radius: 14px;
+    padding: 14px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    background: #fff;
+    height: 100%;
+}
+
+.stat-icon {
+    font-size: 24px;
+}
+
+.stat-number {
+    font-weight: 800;
+    font-size: 1.1rem;
+}
+
+.stat-label {
+    font-size: 0.75rem;
+    color: var(--gray);
+}
+
+/* ===============================
+   FOLDERS
+=================================*/
+.section-title {
+    font-weight: 800;
+    margin-bottom: 16px;
+}
+
+.folder-card {
+    border: 2px solid #000;
+    border-radius: 14px;
+    padding: 16px;
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+    align-items: center;
+    transition: 0.2s;
+    background: #fff;
+    height: 100%;
+}
+
+.folder-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 14px rgba(0,0,0,0.08);
+}
+
+.folder-icon {
+    font-size: 26px;
+}
+
+.folder-name {
+    font-weight: 700;
+}
+
+.folder-meta {
+    font-size: 0.75rem;
+    color: var(--gray);
+}
+
+/* ===============================
+   TABLE
+=================================*/
+.table-custom thead {
+    border-bottom: 2px solid #000;
+}
+
+.file-badge {
+    background: #000;
+    color: #fff;
+    padding: 2px 6px;
+    border-radius: 5px;
+    font-size: 0.65rem;
+}
+
+.btn-outline-dark-custom {
+    border: 2px solid #000;
+    color: #000;
+}
+
+.btn-outline-dark-custom:hover {
+    background: #000;
+    color: #fff;
+}
+
+/* ===============================
+   RESPONSIVE
+=================================*/
+
+/* Tablet */
+@media (max-width: 992px) {
+
+    .sidebar {
+        width: 210px;
+    }
+
+    :root {
+        --sidebar-width: 210px;
+    }
+
+    .main-content {
+        padding: 24px;
+    }
+}
+
+/* Mobile */
+@media (max-width: 768px) {
+
+    .sidebar {
+        position: relative;
+        width: 100%;
+        height: auto;
+        flex-direction: row;
+        align-items: center;
+        gap: 20px;
+    }
+
+    .sidebar nav {
+        flex-direction: row;
+        flex-wrap: wrap;
+        gap: 6px;
+    }
+
+    .storage-card {
+        display: none;
+    }
+
+    .top-nav {
+        margin-left: 0;
+    }
+
+    .main-content {
+        margin-left: 0;
+        padding: 20px;
+    }
+}
+
+/* Small mobile */
+@media (max-width: 480px) {
+
+    .stat-card {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .folder-card {
+        flex-direction: column;
+        text-align: center;
+    }
+}
