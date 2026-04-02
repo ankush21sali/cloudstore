@@ -8,7 +8,7 @@ from . models import UploadedFile, Folder
 from .utils import get_total_size, human_readable_size, filter_file
 from django.db.models import Count
 
-@login_required(login_url='signin')
+@login_required
 def dashboard(request):
 
     form = UploadedFileForm(user=request.user)
@@ -44,7 +44,7 @@ def dashboard(request):
             
 
     user_files = UploadedFile.objects.filter(user=request.user)
-    user_folders = Folder.objects.filter(user=request.user)
+    user_folders = Folder.objects.filter(user=request.user).order_by('-id')
 
     recent_files = UploadedFile.objects.order_by('-uploaded_at')[:5]
 
@@ -64,7 +64,7 @@ def dashboard(request):
 
     
 
-@login_required(login_url='signin')
+@login_required
 def videos(request):
 
     form = UploadedFileForm(user=request.user)           
@@ -101,7 +101,7 @@ def videos(request):
 
 
 
-@login_required(login_url='signin')
+@login_required
 def images(request):
 
     form = UploadedFileForm(user=request.user)           
@@ -138,7 +138,7 @@ def images(request):
 
 
 
-@login_required(login_url='signin')
+@login_required
 def docs(request):
     form = UploadedFileForm(user=request.user)           
 
@@ -175,7 +175,7 @@ def docs(request):
 
 
 
-@login_required(login_url='signin')
+@login_required
 def audios(request):
     form = UploadedFileForm(user=request.user)           
 
@@ -210,9 +210,14 @@ def audios(request):
     return render(request, 'files/audios.html', context)
 
 
-
+@login_required
 def folder_detail(request, slug):
-    folder = get_object_or_404(Folder, user=request.user, slug=slug)
+    
+    try:
+        folder = Folder.objects.get(user=request.user, slug=slug)
+    except Folder.DoesNotExist:
+        messages.error(request, 'Folder DoesNotExist!')
+        return redirect('files:dashboard')
 
     # -------- Upload File In Folder--------
     if request.method == 'POST' and 'upload_file' in request.POST:
@@ -247,7 +252,7 @@ def folder_detail(request, slug):
 
 
 
-@login_required(login_url='signin')
+@login_required
 def delete_file(request, id):
     request_path = request.META.get('HTTP_REFERER', 'files:dashboard')
 
@@ -262,17 +267,19 @@ def delete_file(request, id):
     return redirect(request_path)
 
 
+@login_required
 def delete_folder(request, folder_id):
     try:
         folder = Folder.objects.get(pk=folder_id)
         folder.delete()
+        messages.success(request, 'Folder deleted successfully!')
     except Folder.DoesNotExist:
-        pass
+        messages.error(request, 'Folder DoesNotExits!')
 
     return redirect('files:dashboard')
 
 
-@login_required(login_url='signin')
+@login_required
 def favourites(request):
     user = request.user
 
@@ -303,7 +310,7 @@ def favourites(request):
     return render(request, 'files/favourites.html', context)
 
 
-
+@login_required
 def favourite_item(request, id):
     if request.method == 'POST':
         file = UploadedFile.objects.get(user=request.user, pk=id)

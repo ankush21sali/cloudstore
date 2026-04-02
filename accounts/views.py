@@ -53,6 +53,7 @@ def signout(request):
     return redirect('accounts:signin')
 
 
+@login_required
 def my_profile(request):
     user = request.user
 
@@ -80,6 +81,7 @@ def my_profile(request):
     return render(request, 'accounts/userprofile.html', context)
 
 
+@login_required
 def settings(request):
 
     if request.method == 'POST':
@@ -97,6 +99,7 @@ def settings(request):
     return render(request, 'accounts/settings.html')
 
 
+@login_required
 def change_password(request):
 
     if request.method == 'POST':
