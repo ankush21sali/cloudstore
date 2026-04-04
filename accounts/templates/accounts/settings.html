@@ -11,45 +11,45 @@
 
 {% include "navbar.html" %}
 
-     <!-- MAIN CONTENT – SETTINGS PAGE -->
-    <div class="main-content">
+<!-- MAIN CONTENT – SETTINGS PAGE -->
+<div class="main-content">
 
-        <!-- page header -->
-        <div class="page-header">
-            <h1>
-                <i class="bi bi-gear-fill"></i> SETTINGS
-            </h1>
-            <p>Configure your account preferences, security, and application settings</p>
-        </div>
+    <!-- page header -->
+    <div class="page-header">
+        <h1>
+            <i class="bi bi-gear-fill"></i> SETTINGS
+        </h1>
+        <p>Configure your account preferences, security, and application settings</p>
+    </div>
 
-        <!-- settings layout with sidebar navigation -->
-        <div class="settings-layout">
+    <!-- settings layout with sidebar navigation -->
+    <div class="settings-layout">
 
-            <!-- Danger Zone Panel -->
-            <div class="settings-panel" id="danger">
-                <div class="panel-title">
-                    <i class="bi bi-exclamation-triangle"></i> Danger Zone
-                </div>
-
-                <div class="danger-zone">
-                    <div class="danger-zone-title">⚠️ Delete Account</div>
-                    <p class="small">Once you delete your account, there is no going back. Please be certain.</p>
-                    <button class="btn-danger-outline" data-bs-toggle="modal" data-bs-target="#deleteAccountModal">
-                        <i class="bi bi-trash3"></i> Delete Account
-                    </button>
-                </div>
-
-                <div class="danger-zone mt-3">
-                    <div class="danger-zone-title">📁 Clear All Data</div>
-                    <p class="small">Permanently remove all files, folders, and activity data.</p>
-                    <button class="btn-danger-outline" data-bs-toggle="modal" data-bs-target="#clearAllDataModal">
-                        <i class="bi bi-eraser"></i> Clear All Data
-                    </button>
-                </div>
-
+        <!-- Danger Zone Panel -->
+        <div class="settings-panel" id="danger">
+            <div class="panel-title">
+                <i class="bi bi-exclamation-triangle"></i> Danger Zone
             </div>
+
+            <div class="danger-zone">
+                <div class="danger-zone-title">⚠️ Delete Account</div>
+                <p class="small">Once you delete your account, there is no going back. Please be certain.</p>
+                <button class="btn-danger-outline" data-bs-toggle="modal" data-bs-target="#deleteAccountModal">
+                    <i class="bi bi-trash3"></i> Delete Account
+                </button>
+            </div>
+
+            <div class="danger-zone mt-3">
+                <div class="danger-zone-title">📁 Clear All Data</div>
+                <p class="small">Permanently remove all files, folders, and activity data.</p>
+                <button class="btn-danger-outline" data-bs-toggle="modal" data-bs-target="#clearAllDataModal">
+                    <i class="bi bi-eraser"></i> Clear All Data
+                </button>
+            </div>
+
         </div>
     </div>
+</div>
 
 <div class="modal fade" id="deleteAccountModal" tabindex="-1">
     <div class="modal-dialog modal-dialog-centered">

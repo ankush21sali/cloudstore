@@ -46,24 +46,24 @@
             <tbody>
                 {% for file in files %}
                 <tr>
-                     <!-- File Name + Icon -->
+                    <!-- File Name + Icon -->
                     <td class="py-3 fw-bold">
                         {% if "image" in file.file_type %}
                         <i class="bi bi-image-fill me-2 text-success"></i>
-                        
+
                         {% elif "video" in file.file_type %}
                         <i class="bi bi-camera-video-fill me-2 text-primary"></i>
-                        
+
                         {% elif "audio" in file.file_type %}
                         <i class="bi bi-music-note-beamed me-2 text-warning"></i>
-                        
+
                         {% elif "application" in file.file_type %}
                         <i class="bi bi-file-earmark-text me-2 text-danger"></i>
-                        
+
                         {% else %}
                         <i class="bi bi-file-earmark me-2 text-secondary"></i>
                         {% endif %}
-                        
+
                         {{ file.file.name|cut:"uploads/"|truncatechars:20 }}
                     </td>
                     <td><span class="file-badge">{{file.file_type|truncatechars:20}}</span></td>
@@ -74,7 +74,7 @@
                     </td>
                 </tr>
                 {% endfor %}
-    
+
             </tbody>
         </table>
     </div>

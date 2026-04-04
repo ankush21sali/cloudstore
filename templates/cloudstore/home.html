@@ -13,78 +13,78 @@
 {% block content %}
 
 
-    <nav class="navbar navbar-expand-lg sticky-top bg-white">
-        <div class="container">
-            <a class="navbar-brand fs-3" href="{% url "home" %}">CLOUDSTORE.</a>
+<nav class="navbar navbar-expand-lg sticky-top bg-white">
+    <div class="container">
+        <a class="navbar-brand fs-3" href="{% url "home" %}">CLOUDSTORE.</a>
 
-            <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-                <i class="bi bi-list fs-2"></i>
-            </button>
+        <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+            <i class="bi bi-list fs-2"></i>
+        </button>
 
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav ms-auto align-items-center">
-                    <li class="nav-item">
-                        <a href="{% url 'accounts:signin' %}" class="nav-link-signin">Sign In</a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="{% url 'accounts:signup' %}" class="btn btn-get-started">Get Started</a>
-                    </li>
-                </ul>
-            </div>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ms-auto align-items-center">
+                <li class="nav-item">
+                    <a href="{% url 'accounts:signin' %}" class="nav-link-signin">Sign In</a>
+                </li>
+                <li class="nav-item">
+                    <a href="{% url 'accounts:signup' %}" class="btn btn-get-started">Get Started</a>
+                </li>
+            </ul>
         </div>
-    </nav>
+    </div>
+</nav>
 
-    <header class="hero-section">
-        <div class="container">
-            <h1 class="hero-title mb-4">YOUR MEDIA. <br> CENTRALIZED.</h1>
-            <p class="lead mb-5 opacity-75">Securely host your images, documents, audio, and videos <br> in a high-speed
-                monochromatic vault.</p>
-            <div class="d-flex justify-content-center gap-3">
+<header class="hero-section">
+    <div class="container">
+        <h1 class="hero-title mb-4">YOUR MEDIA. <br> CENTRALIZED.</h1>
+        <p class="lead mb-5 opacity-75">Securely host your images, documents, audio, and videos <br> in a high-speed
+            monochromatic vault.</p>
+        <div class="d-flex justify-content-center gap-3">
 
-                <a href="{% url 'accounts:signup' %}">
+            <a href="{% url 'accounts:signup' %}">
                 <button class="btn btn-get-started py-3 px-5 fs-5"
                     style="border-color: white; background: white; color: black;">Upload Now</button>
-                </a>
+            </a>
 
-            </div>
         </div>
-    </header>
+    </div>
+</header>
 
-    <section class="py-5 mt-5">
-        <div class="container">
-            <div class="row g-4">
-                <div class="col-md-3 col-6">
-                    <div class="media-card">
-                        <i class="bi bi-image media-icon"></i>
-                        <h6 class="fw-bold">IMAGES</h6>
-                    </div>
-                </div>
-                <div class="col-md-3 col-6">
-                    <div class="media-card">
-                        <i class="bi bi-file-earmark-text media-icon"></i>
-                        <h6 class="fw-bold">DOCS</h6>
-                    </div>
-                </div>
-                <div class="col-md-3 col-6">
-                    <div class="media-card">
-                        <i class="bi bi-music-note-beamed media-icon"></i>
-                        <h6 class="fw-bold">AUDIO</h6>
-                    </div>
-                </div>
-                <div class="col-md-3 col-6">
-                    <div class="media-card">
-                        <i class="bi bi-play-btn media-icon"></i>
-                        <h6 class="fw-bold">VIDEOS</h6>
-                    </div>
+<section class="py-5 mt-5">
+    <div class="container">
+        <div class="row g-4">
+            <div class="col-md-3 col-6">
+                <div class="media-card">
+                    <i class="bi bi-image media-icon"></i>
+                    <h6 class="fw-bold">IMAGES</h6>
                 </div>
             </div>
+            <div class="col-md-3 col-6">
+                <div class="media-card">
+                    <i class="bi bi-file-earmark-text media-icon"></i>
+                    <h6 class="fw-bold">DOCS</h6>
+                </div>
+            </div>
+            <div class="col-md-3 col-6">
+                <div class="media-card">
+                    <i class="bi bi-music-note-beamed media-icon"></i>
+                    <h6 class="fw-bold">AUDIO</h6>
+                </div>
+            </div>
+            <div class="col-md-3 col-6">
+                <div class="media-card">
+                    <i class="bi bi-play-btn media-icon"></i>
+                    <h6 class="fw-bold">VIDEOS</h6>
+                </div>
+            </div>
         </div>
-    </section>
+    </div>
+</section>
 
-    <footer class="border-top py-5 bg-white">
-        <div class="container text-center">
-            <p class="small fw-bold mb-0">CLOUDSTORE &copy; 2026 | ALL RIGHTS RESERVED</p>
-        </div>
-    </footer>
+<footer class="border-top py-5 bg-white">
+    <div class="container text-center">
+        <p class="small fw-bold mb-0">CLOUDSTORE &copy; 2026 | ALL RIGHTS RESERVED</p>
+    </div>
+</footer>
 
 {% endblock %}
