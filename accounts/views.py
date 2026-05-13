@@ -6,19 +6,33 @@ from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from files.models import Folder, UploadedFile
 from django.contrib.auth import update_session_auth_hash
+from django.utils import timezone
+from datetime import timedelta
+from .models import OTP
+from.utils import send_otp_email
 
 # Create your views here.
 
 def signup(request):
     if request.method == 'POST':
         form = SignUpForm(request.POST)
+
         if form.is_valid():
             user = form.save(commit=False)
             user.set_password(form.cleaned_data['password'])  # hash password
+            
+            user.is_active = False
             user.save()
-            return redirect('accounts:signin')
+
+            # Store ID in session so verify_otp can find this user.
+            request.session['user_id'] = user.id 
+
+            send_otp_email(user.email)
+            messages.info(request, "Please check your email for the OTP.")
+            return redirect('accounts:verify_otp')
     else:
         form = SignUpForm()
+
     return render(request, 'accounts/signup.html', {'form': form})
 
 
@@ -26,26 +40,75 @@ def signin(request):
     if request.method == 'POST':
         user_identity = request.POST['user_identity']
         password = request.POST['password']
-
-        try:
-            if user_identity.endswith('@gmail.com'):
-                user_obj = User.objects.get(email=user_identity)
-                user = authenticate(request, username=user_obj.username, password=password)
-
-            else:
-                user = authenticate(request, username=user_identity, password=password)
-            
-        except User.DoesNotExist:
-            user = None
-
-        if user is not None:
-            login(request, user)
-            return redirect('files:dashboard')
         
+        if user_identity.endswith('@gmail.com'):
+            user_obj = User.objects.filter(email=user_identity).first()
         else:
-            messages.error(request, "Invalid email or password")
+            user_obj = User.objects.filter(username=user_identity).filter()
+
+        if user_obj and user_obj.check_password(password):
+
+            if not user_obj.is_active:
+                request.session['user_id'] = user_obj.id
+                send_otp_email(user_obj.email)
+
+                messages.warning(request, "Account not verified. A new OTP has been sent.")
+                return redirect('accounts:verify_otp')
+            
+            user = authenticate(request, username=user_obj.username, password=password)
+            if user is not None:
+                login(request, user)
+                return redirect('files:dashboard')
+        
+
+        messages.error(request, "Invalid email or password")
 
     return render(request, 'accounts/signin.html')
+
+
+def verify_otp(request):
+    user_id = request.session.get("user_id")
+    
+    if not user_id:
+        messages.error(request, "Session expired. Please sign up again.")
+        return redirect("accounts:signup")
+
+    if request.method == "POST":
+        entered_otp = request.POST.get("code")
+
+        try:
+            user = User.objects.get(id=user_id)
+        except User.DoesNotExist:
+            messages.error(request, "Account not found. Please sign up.")
+            return redirect("accounts:signup")
+        
+        otp_obj = OTP.objects.filter(user=user).last()
+
+        if not otp_obj:
+            messages.warning(request, "No OTP found")
+            return redirect("accounts:verify_otp")
+
+        if otp_obj.is_expired():
+            otp_obj.delete()
+            messages.warning(request, "OTP Expired")
+            return redirect("accounts:verify_otp")
+
+        if otp_obj.otp == entered_otp:
+            user.is_active = True
+            user.save()
+
+            login(request, user)
+
+            otp_obj.delete()
+            del request.session["user_id"]
+
+            messages.success(request, "OTP Verified Successfully")
+            return redirect("files:dashboard")
+
+        messages.error(request, "Invalid OTP")
+        return redirect("accounts:verify_otp")
+
+    return render(request, "accounts/verify-otp.html")
 
 
 def signout(request):

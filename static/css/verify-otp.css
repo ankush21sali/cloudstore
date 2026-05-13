@@ -1,0 +1,146 @@
+        @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;500;700&display=swap');
+
+        body {
+            background-color: #ffffff;
+            color: #000000;
+            font-family: 'Space Grotesk', sans-serif;
+            height: 100vh;
+            margin: 0;
+        }
+
+        .verify-container {
+            display: flex;
+            height: 100vh;
+        }
+
+        /* Branding Side */
+        .verify-visual {
+            background-color: #000000;
+            color: #ffffff;
+            flex: 1.2;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding: 80px;
+        }
+
+        /* Form Side */
+        .verify-form-section {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding: 60px;
+            background-color: #ffffff;
+        }
+
+        .form-control {
+            border-radius: 0;
+            border: 2px solid #eeeeee;
+            padding: 12px;
+            font-weight: 500;
+            text-align: center;
+            font-size: 1.5rem;
+            letter-spacing: 8px;
+        }
+
+        .form-control:focus {
+            border-color: #000000;
+            box-shadow: none;
+        }
+
+        .form-label {
+            font-weight: 700;
+            text-transform: uppercase;
+            font-size: 0.75rem;
+            letter-spacing: 1px;
+        }
+
+        .btn-verify {
+            background-color: #000000;
+            color: #ffffff;
+            border-radius: 0;
+            padding: 15px;
+            font-weight: 700;
+            width: 100%;
+            border: 2px solid #000000;
+            transition: 0.3s;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-top: 10px;
+            display: inline-block;
+            text-align: center;
+            text-decoration: none;
+        }
+
+        .btn-verify:hover {
+            background-color: #ffffff;
+            color: #000000;
+        }
+
+        .back-home {
+            position: absolute;
+            top: 40px;
+            right: 40px;
+            color: #000000;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+
+        .back-home:hover {
+            text-decoration: underline;
+        }
+
+        .resend-link {
+            color: #000000;
+            text-decoration: underline;
+            font-weight: 600;
+        }
+
+        .resend-link:hover {
+            text-decoration: none;
+        }
+
+        .timer-text {
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: #777;
+        }
+
+        .info-message {
+            font-size: 0.8rem;
+            margin-top: 8px;
+            min-height: 40px;
+        }
+
+        .demo-hint {
+            background-color: #f8f9fa;
+            border-left: 4px solid #000000;
+            padding: 10px 15px;
+            margin-bottom: 20px;
+            font-size: 0.85rem;
+            color: #333;
+        }
+
+        @media (max-width: 992px) {
+            .verify-visual {
+                display: none;
+            }
+
+            .back-home {
+                top: 20px;
+                right: 20px;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .verify-form-section {
+                padding: 40px 24px;
+            }
+
+            .form-control {
+                font-size: 1.2rem;
+                letter-spacing: 4px;
+            }
+        }
