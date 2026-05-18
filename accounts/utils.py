@@ -29,7 +29,7 @@ def send_otp_email(email):
     send_mail(
         subject="Your OTP Code",
         message=f"Your OTP is {otp_code}",
-        from_email=settings.EMAIL_HOST_USER,
+        from_email=settings.DEFAULT_FROM_EMAIL,
         recipient_list=[user.email],
         fail_silently=False
     )

@@ -85,8 +85,8 @@ class UploadedFile(models.Model):
         return format_duration(self.duration)
 
     def delete(self, *args, **kwargs):
-        if self.file and os.path.isfile(self.file.path):
-            os.remove(self.file.path)
+        if self.file:
+            self.file.delete(save=False)
         super().delete(*args, **kwargs)
 
     def __str__(self):

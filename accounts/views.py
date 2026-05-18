@@ -59,10 +59,9 @@ def signin(request):
             if user is not None:
                 login(request, user)
                 return redirect('files:dashboard')
-        
 
         messages.error(request, "Invalid email or password")
-
+        
     return render(request, 'accounts/signin.html')
 
 
