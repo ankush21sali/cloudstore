@@ -31,7 +31,7 @@ def send_otp_email(email):
 
     payload = {
         "sender": {
-            "name": "My App",
+            "name": "CloudStore",
             "email": settings.DEFAULT_FROM_EMAIL
         },
         "to": [{"email": user.email}],
