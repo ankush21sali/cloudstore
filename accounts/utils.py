@@ -2,6 +2,7 @@ from django.core.mail import send_mail
 from django.conf import settings
 from django.utils import timezone
 from datetime import timedelta
+import requests
 import secrets
 
 from django.contrib.auth.models import User
@@ -26,11 +27,30 @@ def send_otp_email(email):
         }
     )
 
-    send_mail(
-        subject="Your OTP Code",
-        message=f"Your OTP is {otp_code}",
-        from_email=settings.DEFAULT_FROM_EMAIL,
-        recipient_list=[user.email],
-        fail_silently=False
-    )
+    url = "https://api.brevo.com/v3/smtp/email"
+
+    payload = {
+        "sender": {
+            "name": "My App",
+            "email": settings.DEFAULT_FROM_EMAIL
+        },
+        "to": [{"email": user.email}],
+        "subject": "Your OTP Code",
+        "htmlContent": f"""
+            <h2>Email Verification</h2>
+            <p>Your OTP is: <strong>{otp_code}</strong></p>
+            <p>This OTP expires in 5 minutes.</p>
+        """
+    }
+
+    headers = {
+        "accept": "application/json",
+        "api-key": settings.BREVO_API_KEY,
+        "content-type": "application/json"
+    }
+
+    response = requests.post(url, json=payload, headers=headers)
+
+    print(response.status_code)
+    print(response.text)
         
