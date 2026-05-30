@@ -454,23 +454,8 @@ body {
             left: 24px;
         }
 
-        /* plan card */
-        .plan-card {
-            background: #f8f8f8;
-            border: 2px solid #000;
-            border-radius: 20px;
-            padding: 20px;
-            margin-top: 16px;
-        }
-
-        .plan-name {
-            font-weight: 800;
-            font-size: 1.2rem;
-        }
-
-        .plan-price {
-            font-size: 1.8rem;
-            font-weight: 800;
+        .forgot-password {
+            display: inline;
         }
 
         /* responsive */

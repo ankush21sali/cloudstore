@@ -51,6 +51,7 @@ def send_otp_email(email):
 
     response = requests.post(url, json=payload, headers=headers)
 
-    print(response.status_code)
-    print(response.text)
-        
+    # print(response.status_code)
+    # print(response.text)
+    # print(email)
+    # print(settings.DEFAULT_FROM_EMAIL)
