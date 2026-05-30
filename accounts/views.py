@@ -276,6 +276,6 @@ def forgot_password(request):
         logout(request)
 
         messages.success(request, "Password changed successfully. Please login again.")
-        return redirect('accounts:dashboard')
+        return redirect('files:dashboard')
 
     return render(request, "accounts/forgot_password.html")
