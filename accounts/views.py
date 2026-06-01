@@ -210,11 +210,11 @@ def send_otp(request):
     
     send_otp_email(user.email)
     messages.info(request, "Please check your email for the OTP.")
-    return redirect('accounts:forgot_password_verify_otp')
+    return redirect('accounts:reset_password_verify_otp')
 
 
 
-def forgot_password_verify_otp(request):
+def reset_password_verify_otp(request):
     user_id = request.session.get("user_id")
     
     if not user_id:
@@ -234,12 +234,12 @@ def forgot_password_verify_otp(request):
 
         if not otp_obj:
             messages.warning(request, "No OTP found")
-            return redirect("accounts:forgot_password_verify_otp")
+            return redirect("accounts:reset_password_verify_otp")
 
         if otp_obj.is_expired():
             otp_obj.delete()
             messages.warning(request, "OTP Expired")
-            return redirect("accounts:forgot_password_verify_otp")
+            return redirect("accounts:reset_password_verify_otp")
 
         if otp_obj.otp == entered_otp:
             user.is_active = True
@@ -251,16 +251,16 @@ def forgot_password_verify_otp(request):
             del request.session["user_id"]
 
             messages.success(request, "OTP Verified Successfully")
-            return redirect("accounts:forgot_password")
+            return redirect("accounts:reset_password")
 
         messages.error(request, "Invalid OTP")
-        return redirect("accounts:forgot_password_verify_otp")
+        return redirect("accounts:reset_password_verify_otp")
 
-    return render(request, "accounts/forgot_password_verify_otp.html")
+    return render(request, "accounts/reset_password_verify_otp.html")
 
 
 @login_required
-def forgot_password(request):
+def reset_password(request):
     if request.method == 'POST':
         new_password = request.POST.get('new_password')
         confirm_password = request.POST.get('confirm_password')
@@ -269,7 +269,7 @@ def forgot_password(request):
 
         if new_password != confirm_password:
             messages.error(request, "New passwords do not match.")
-            return redirect('accounts:forgot_password')
+            return redirect('accounts:reset_password')
             
         user.set_password(new_password)
         user.save()
@@ -277,5 +277,25 @@ def forgot_password(request):
 
         messages.success(request, "Password changed successfully. Please login again.")
         return redirect('files:dashboard')
+
+    return render(request, "accounts/reset_password.html")
+
+
+def forgot_password(request):
+    if request.method == 'POST':
+        email = request.POST.get('email')
+
+        try:
+            user = User.objects.get(email=email)
+        except User.DoesNotExist:
+            messages.error(request, "Opps!, User DoesNotExist.")
+            return redirect('accounts:signin')
+        
+        # Store ID in session so verify_otp can find this user.
+        request.session['user_id'] = user.id 
+        
+        send_otp_email(user.email)
+        messages.info(request, "Please check your email for the OTP.")
+        return redirect('accounts:reset_password_verify_otp')
 
     return render(request, "accounts/forgot_password.html")
