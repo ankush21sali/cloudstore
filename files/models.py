@@ -7,7 +7,6 @@ import requests
 from django.db import models
 from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
-from mutagen import File as MutagenFile
 from django.utils.text import slugify
 
 
@@ -75,12 +74,15 @@ class UploadedFile(models.Model):
                 try:
                     response = requests.get(
                         self.file.url,
+                        stream=True,
                         timeout=10
                     )
                     
                     with tempfile.NamedTemporaryFile(delete=True) as temp:
                         
-                        temp.write(response.content)
+                        for chunk in response.iter_content(chunk_size=1024 * 1024):
+                            temp.write(chunk)
+                        
                         temp.flush()
                         
                         result = subprocess.run(
@@ -99,14 +101,15 @@ class UploadedFile(models.Model):
                             timeout=10
                         )
                         
-                        data = json.loads(result.stdout)
-                        
-                        duration = data["format"]["duration"]
-                        
-                        self.duration = int(float(duration))
-                        
-                        super().save(
-                            update_fields=["duration"]
+                        if result.stdout:
+                            data = json.loads(result.stdout)
+                            
+                            duration = data["format"]["duration"]
+                            
+                            self.duration = int(float(duration))
+                            
+                            super().save(
+                                update_fields=["duration"]
                             )
 
                 except Exception as e:
