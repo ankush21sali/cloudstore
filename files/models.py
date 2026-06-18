@@ -1,12 +1,11 @@
 import os
 import mimetypes
-import subprocess
-import json
 import tempfile
 import requests
 from django.db import models
 from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
+from mutagen import File as MutagenFile
 from django.utils.text import slugify
 
 
@@ -69,8 +68,7 @@ class UploadedFile(models.Model):
 
         # duration only for audio/video
         if self.file and is_new:
-            if self.file_type.startswith("audio") or self.file_type.startswith("video"):
-                
+            if self.file_type.startswith("audio"):
                 try:
                     response = requests.get(
                         self.file.url,
@@ -79,39 +77,17 @@ class UploadedFile(models.Model):
                     )
                     
                     with tempfile.NamedTemporaryFile(delete=True) as temp:
-                        
                         for chunk in response.iter_content(chunk_size=1024 * 1024):
                             temp.write(chunk)
-                        
                         temp.flush()
                         
-                        result = subprocess.run(
-                            [
-                                "ffprobe",
-                                "-v",
-                                "quiet",
-                                "-print_format",
-                                "json",
-                                "-show_format",
-                                temp.name
-                            ],
-                            
-                            stdout=subprocess.PIPE,
-                            stderr=subprocess.PIPE,
-                            timeout=10
-                        )
+                        audio = MutagenFile(temp.name)
                         
-                        if result.stdout:
-                            data = json.loads(result.stdout)
+                        if audio and audio.info:
+                            self.duration = int(audio.info.length)
                             
-                            duration = data["format"]["duration"]
-                            
-                            self.duration = int(float(duration))
-                            
-                            super().save(
-                                update_fields=["duration"]
-                            )
-
+                            super().save(update_fields=["duration"])
+                
                 except Exception as e:
                     print("Duration error:", e)
 
