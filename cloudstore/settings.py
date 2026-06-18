@@ -179,6 +179,8 @@ STORAGES = {
     },
 }
 
+DATA_UPLOAD_MAX_MEMORY_SIZE = 52428800
+FILE_UPLOAD_MAX_MEMORY_SIZE = 52428800
 
 
 # EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
