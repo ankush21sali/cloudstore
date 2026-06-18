@@ -1,5 +1,7 @@
 import os
 import mimetypes
+import subprocess
+import json
 import tempfile
 import requests
 from django.db import models
@@ -14,7 +16,7 @@ MAX_FILE_SIZE = 50 * 1024 * 1024  # 50 MB
 
 def validate_file_size(value):
     if value.size > MAX_FILE_SIZE:
-        raise ValidationError("File size should not exceed 5 MB.")
+        raise ValidationError("File size should not exceed 50 MB.")
 
 
 def format_duration(seconds):
@@ -68,20 +70,44 @@ class UploadedFile(models.Model):
         # calculate duration once after file saved
         if self.file and is_new:
             try:
-                response = requests.get(self.file.url)
-                
-                with tempfile.NamedTemporaryFile(delete=True) as temp:
-                    temp.write(response.content)
-                    temp.flush()
+                if self.file_type.startswith("audio") or self.file_type.startswith("video"):
                     
-                    audio = MutagenFile(temp.name)
+                    response = requests.get(self.file.url)
                     
-                    if audio and audio.info and hasattr(audio.info, "length"):
-                        length = audio.info.length
+                    with tempfile.NamedTemporaryFile(delete=True) as temp:
+                        temp.write(response.content)
+                        temp.flush()
                         
-                        self.duration = int(length)
+                        # Audio duration
+                        if self.file_type.startswith("audio"):
+                            audio = MutagenFile(temp.name)
+                            
+                            if audio and audio.info:
+                                self.duration = int(audio.info.length)
+                        
+                        # Video duration
+                        elif self.file_type.startswith("video"):
+                            result = subprocess.run(
+                                [
+                                    "ffprobe",
+                                    "-v",
+                                    "quiet",
+                                    "-print_format",
+                                    "json",
+                                    "-show_format",
+                                    temp.name
+                                ],
+                                stdout=subprocess.PIPE,
+                                stderr=subprocess.PIPE
+                            )
+                            
+                            data = json.loads(result.stdout)
+                            
+                            duration = data["format"]["duration"]
+                            self.duration = int(float(duration))
+                        
                         super().save(update_fields=["duration"])
-            
+                        
             except Exception as e:
                 print("Duration error:", e)
 
