@@ -59,57 +59,58 @@ class UploadedFile(models.Model):
 
     def save(self, *args, **kwargs):
         is_new = self.pk is None
-
+        
         if self.file:
             self.file_size = self.file.size
             mime_type, _ = mimetypes.guess_type(self.file.name)
             self.file_type = mime_type or "application/octet-stream"
-
+            
+        # save file first
         super().save(*args, **kwargs)
 
-        # calculate duration once after file saved
+        # duration only for audio/video
         if self.file and is_new:
-            try:
-                if self.file_type.startswith("audio") or self.file_type.startswith("video"):
-                    
-                    response = requests.get(self.file.url)
+            if self.file_type.startswith("audio") or self.file_type.startswith("video"):
+                
+                try:
+                    response = requests.get(
+                        self.file.url,
+                        timeout=10
+                    )
                     
                     with tempfile.NamedTemporaryFile(delete=True) as temp:
+                        
                         temp.write(response.content)
                         temp.flush()
                         
-                        # Audio duration
-                        if self.file_type.startswith("audio"):
-                            audio = MutagenFile(temp.name)
+                        result = subprocess.run(
+                            [
+                                "ffprobe",
+                                "-v",
+                                "quiet",
+                                "-print_format",
+                                "json",
+                                "-show_format",
+                                temp.name
+                            ],
                             
-                            if audio and audio.info:
-                                self.duration = int(audio.info.length)
+                            stdout=subprocess.PIPE,
+                            stderr=subprocess.PIPE,
+                            timeout=10
+                        )
                         
-                        # Video duration
-                        elif self.file_type.startswith("video"):
-                            result = subprocess.run(
-                                [
-                                    "ffprobe",
-                                    "-v",
-                                    "quiet",
-                                    "-print_format",
-                                    "json",
-                                    "-show_format",
-                                    temp.name
-                                ],
-                                stdout=subprocess.PIPE,
-                                stderr=subprocess.PIPE
+                        data = json.loads(result.stdout)
+                        
+                        duration = data["format"]["duration"]
+                        
+                        self.duration = int(float(duration))
+                        
+                        super().save(
+                            update_fields=["duration"]
                             )
-                            
-                            data = json.loads(result.stdout)
-                            
-                            duration = data["format"]["duration"]
-                            self.duration = int(float(duration))
-                        
-                        super().save(update_fields=["duration"])
-                        
-            except Exception as e:
-                print("Duration error:", e)
+
+                except Exception as e:
+                    print("Duration error:", e)
 
     @property
     def duration_display(self):
