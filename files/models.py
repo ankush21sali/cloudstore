@@ -1,5 +1,7 @@
 import os
 import mimetypes
+import tempfile
+import requests
 from django.db import models
 from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
@@ -7,7 +9,7 @@ from mutagen import File as MutagenFile
 from django.utils.text import slugify
 
 
-MAX_FILE_SIZE = 5 * 1024 * 1024  # 5 MB
+MAX_FILE_SIZE = 50 * 1024 * 1024  # 50 MB
 
 
 def validate_file_size(value):
@@ -66,17 +68,20 @@ class UploadedFile(models.Model):
         # calculate duration once after file saved
         if self.file and is_new:
             try:
-                audio = MutagenFile(self.file.path)
-                if audio and audio.info and hasattr(audio.info, "length"):
-                    length = audio.info.length
-
-                    # fix ms vs sec
-                    if length > 100000:
-                        length = length / 1000
-
-                    self.duration = int(length)
-                    super().save(update_fields=["duration"])
-
+                response = requests.get(self.file.url)
+                
+                with tempfile.NamedTemporaryFile(delete=True) as temp:
+                    temp.write(response.content)
+                    temp.flush()
+                    
+                    audio = MutagenFile(temp.name)
+                    
+                    if audio and audio.info and hasattr(audio.info, "length"):
+                        length = audio.info.length
+                        
+                        self.duration = int(length)
+                        super().save(update_fields=["duration"])
+            
             except Exception as e:
                 print("Duration error:", e)
 
